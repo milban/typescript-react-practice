@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react"
+import { createGlobalStyle } from "styled-components"
+import { reset } from "styled-reset"
+import Number from "./Number"
+import { Form, Input } from "./input"
 
-const App: React.FC = () => {
+const GlobalStyle = createGlobalStyle`
+  ${reset}
+`
+
+const App: React.FC<{}> = () => {
+  const [counter, setCounter] = useState(0)
+  const [value, setValue] = useState("")
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value }
+    } = event
+    setValue(value)
+  }
+  const onFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+  }
+  const addCounter = (): void => {
+    return setCounter(counter + 1)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <GlobalStyle />
+      <Form onFormSubmit={onFormSubmit}>
+        <Input value={value} onChange={onChange}></Input>
+      </Form>
+      <Number count={counter} />
+      <button onClick={addCounter}>Add Cnt</button>
+      <button onClick={() => setCounter(counter - 1)}>Minus Cnt</button>
+    </>
+  )
 }
 
-export default App;
+export default App
